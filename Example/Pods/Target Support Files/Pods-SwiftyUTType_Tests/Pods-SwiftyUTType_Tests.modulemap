@@ -1,0 +1,6 @@
+framework module Pods_SwiftyUTType_Tests {
+  umbrella header "Pods-SwiftyUTType_Tests-umbrella.h"
+
+  export *
+  module * { export * }
+}

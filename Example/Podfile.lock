@@ -1,0 +1,16 @@
+PODS:
+  - SwiftyUTType (1.0.0)
+
+DEPENDENCIES:
+  - SwiftyUTType (from `../`)
+
+EXTERNAL SOURCES:
+  SwiftyUTType:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  SwiftyUTType: be137caf68b4b540c7d0b4a3f2d0438b4affdb3c
+
+PODFILE CHECKSUM: 4ce9a3a8a5a50f09220e808d64ea3b051e11b960
+
+COCOAPODS: 1.6.0.beta.2

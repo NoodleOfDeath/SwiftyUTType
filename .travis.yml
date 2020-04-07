@@ -10,4 +10,4 @@ before_install:
 - gem install cocoapods
 - pod install --repo-update --project-directory=Example
 script:
-- set -o pipefail && xcodebuild test -enableCodeCoverage YES -workspace Example/SwiftyUTType.xcworkspace -scheme "SwiftyUTType-Example" -sdk iphonesimulator13.2 ONLY_ACTIVE_ARCH=NO -destination 'platform=iOS Simulator,name=iPhone 8 Plus,OS=13.2' | xcpretty
+- set -o pipefail && xcodebuild test -enableCodeCoverage YES -workspace Example/SwiftyUTType.xcworkspace -scheme "SwiftyUTType-Example" -sdk iphonesimulator13.1 ONLY_ACTIVE_ARCH=NO -destination 'platform=iOS Simulator,name=iPhone 8 Plus,OS=13.1' | xcpretty

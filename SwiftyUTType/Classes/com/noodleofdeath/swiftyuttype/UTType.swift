@@ -37,20 +37,33 @@ public let kUTTypeYAML: CFString = "public.yaml" as CFString
 
 public let kUTTypeUnknown: CFString = "public.unknown" as CFString
 
-// MARK: - Protocols
+// MARK: Additional Enumerated Static Values
+extension UTType {
+
+    public static let ActionScript = UTType(kUTTypeActionScript)
+    public static let CSS = UTType(kUTTypeCSS)
+    public static let HTACCESS = UTType(kUTTypeHTACCESS)
+    public static let Markdown = UTType(kUTTypeMarkdown)
+    public static let YAML = UTType(kUTTypeYAML)
+
+    /// Unknown uniform type identifier.
+    public static let Unknown = UTType(kUTTypeUnknown)
+
+}
+
+/// Specifications for an object with a uniform type identifier.
+public protocol UTTypeProtocol {
+
+    /// Uniform type identifier of this object.
+    var uttype: UTType { get }
+
+}
 
 /// Specifications for a object from which a uttype can be derived.
 public protocol UTTypePathExtensionProtocol {
     
     /// Path extension of this object.
     var pathExtension: String { get }
-    
-}
-
-public protocol UTTypeProtocol {
-    
-    /// Uniform type identifier of this object.
-    var uttype: UTType { get }
     
 }
 
@@ -190,9 +203,6 @@ public struct UTType: Hashable, Equatable, RawRepresentable {
     
     /// Default core value for new uniform type identifier instances.
     public static let DefaultCoreValue: CoreValue = kUTTypeUnknown
-    
-    /// Unknown uniform type identifier.
-    public static let Unknown = UTType(kUTTypeUnknown)
     
     // MARK: - RawRepresentable Properties
     
@@ -1737,16 +1747,5 @@ extension UTType {
         = UTType(kUTTypeElectronicPublication)
     @available(iOS 8.0, *)
     public static let Log = UTType(kUTTypeLog)
-    
-}
-
-// MARK: Additional Enumerated Static Values
-extension UTType {
-    
-    public static let ActionScript = UTType(kUTTypeActionScript)
-    public static let CSS = UTType(kUTTypeCSS)
-    public static let HTACCESS = UTType(kUTTypeHTACCESS)
-    public static let Markdown = UTType(kUTTypeMarkdown)
-    public static let YAML = UTType(kUTTypeYAML)
     
 }

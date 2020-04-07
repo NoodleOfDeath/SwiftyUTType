@@ -258,44 +258,44 @@ extension NSAttributedString {
     
 }
 
-// MARK: - NSAttributedStringKey Class Extensions
-extension NSAttributedStringKey {
+// MARK: - NSAttributedString.Key Class Extensions
+extension NSAttributedString.Key {
     
     /// Attribute name key for tint color.
     static let tintColor
-        = NSAttributedStringKey("NSTintColor")
+        = NSAttributedString.Key("NSTintColor")
     
     /// Attribute name key for alpha.
     static let alpha
-        = NSAttributedStringKey("NSAlpha")
+        = NSAttributedString.Key("NSAlpha")
     
     /// Attribute name key for point size.
     static let pointSize
-        = NSAttributedStringKey("NSPointSize")
+        = NSAttributedString.Key("NSPointSize")
     
     /// Attribute name key for icon tint color.
     static let iconTintColor
-        = NSAttributedStringKey("NSIconTintColor")
+        = NSAttributedString.Key("NSIconTintColor")
     
     /// Attribute name key for icon alpha.
     static let iconOpacity
-        = NSAttributedStringKey("NSIconOpacity")
+        = NSAttributedString.Key("NSIconOpacity")
     
     /// Attribute name key for icon shadow.
     static let iconShadow
-        = NSAttributedStringKey("NSIconShadow")
+        = NSAttributedString.Key("NSIconShadow")
     
     /// Attribute name key for shadow color.
     static let shadowColor
-        = NSAttributedStringKey("NSShadowColor")
+        = NSAttributedString.Key("NSShadowColor")
     
     /// Attribute name key for shadow blur radius.
     static let shadowBlurRadius
-        = NSAttributedStringKey("NSShadowBlurRadius")
+        = NSAttributedString.Key("NSShadowBlurRadius")
     
     /// Attribute name key for shadow offset.
     static let shadowOffset
-        = NSAttributedStringKey("NSShadowOffset")
+        = NSAttributedString.Key("NSShadowOffset")
     
 }
 
@@ -428,10 +428,10 @@ extension NSShadow {
         return color?.cgColor
     }
     
-    convenience init?(dict: [NSAttributedStringKey: Any]?) {
+    convenience init?(dict: [NSAttributedString.Key: Any]?) {
         guard let dict = dict else { return nil }
         self.init()
-        shadowColor = UIColor(dict: dict[.shadowColor] as? [NSAttributedStringKey: Any])
+        shadowColor = UIColor(dict: dict[.shadowColor] as? [NSAttributedString.Key: Any])
         shadowBlurRadius = dict[.shadowBlurRadius] as? CGFloat ?? 0
         shadowOffset = CGSize(dict: dict[.shadowOffset] as? [String: Any]) ?? .zero
     }
@@ -849,7 +849,7 @@ extension String {
     /// - Parameters:
     ///     - attributes:
     /// - Returns:
-    func size(withAttributes attributes: [NSAttributedStringKey: Any]) -> CGSize {
+    func size(withAttributes attributes: [NSAttributedString.Key: Any]) -> CGSize {
         return ns.size(withAttributes: attributes)
     }
     
@@ -858,7 +858,7 @@ extension String {
     /// - Parameters:
     ///     - attributes:
     /// - Returns:
-    func width(withAttributes attributes: [NSAttributedStringKey: Any]) -> CGFloat {
+    func width(withAttributes attributes: [NSAttributedString.Key: Any]) -> CGFloat {
         return size(withAttributes: attributes).width
     }
     
@@ -867,7 +867,7 @@ extension String {
     /// - Parameters:
     ///     - attributes:
     /// - Returns:
-    func height(withAttributes attributes: [NSAttributedStringKey: Any]) -> CGFloat {
+    func height(withAttributes attributes: [NSAttributedString.Key: Any]) -> CGFloat {
         return size(withAttributes: attributes).height
     }
     
@@ -879,7 +879,7 @@ extension String {
     ///     - attributes:
     ///     - context:
     /// - Returns:
-    func boundingRect(with size: CGSize, options: NSStringDrawingOptions = [],  attributes: [NSAttributedStringKey: Any]? = nil, context: NSStringDrawingContext? = nil) -> CGRect {
+    func boundingRect(with size: CGSize, options: NSStringDrawingOptions = [],  attributes: [NSAttributedString.Key: Any]? = nil, context: NSStringDrawingContext? = nil) -> CGRect {
         return ns.boundingRect(with: size,
                                options: options,
                                attributes: attributes,
@@ -894,7 +894,7 @@ extension String {
     ///     - attributes:
     ///     - context:
     /// - Returns:
-    func boundingSize(with size: CGSize, options: NSStringDrawingOptions = [],  attributes: [NSAttributedStringKey: Any]? = nil, context: NSStringDrawingContext? = nil) -> CGSize {
+    func boundingSize(with size: CGSize, options: NSStringDrawingOptions = [],  attributes: [NSAttributedString.Key: Any]? = nil, context: NSStringDrawingContext? = nil) -> CGSize {
         return boundingRect(with: size,
                             options: options,
                             attributes: attributes,
@@ -909,7 +909,7 @@ extension String {
     ///     - attributes:
     ///     - context:
     /// - Returns:
-    func boundingWidth(forHeight height: CGFloat, options: NSStringDrawingOptions = [],  attributes: [NSAttributedStringKey: Any]? = nil, context: NSStringDrawingContext? = nil) -> CGFloat {
+    func boundingWidth(forHeight height: CGFloat, options: NSStringDrawingOptions = [],  attributes: [NSAttributedString.Key: Any]? = nil, context: NSStringDrawingContext? = nil) -> CGFloat {
         return boundingRect(with: CGSize(width: .max, height: height),
                             options: options,
                             attributes: attributes,
@@ -924,7 +924,7 @@ extension String {
     ///     - attributes:
     ///     - context:
     /// - Returns:
-    func boundingHeight(forWidth width: CGFloat, options: NSStringDrawingOptions = [],  attributes: [NSAttributedStringKey: Any]? = nil, context: NSStringDrawingContext? = nil) -> CGFloat {
+    func boundingHeight(forWidth width: CGFloat, options: NSStringDrawingOptions = [],  attributes: [NSAttributedString.Key: Any]? = nil, context: NSStringDrawingContext? = nil) -> CGFloat {
         return boundingRect(with: CGSize(width: width, height: .max),
                             options: options,
                             attributes: attributes,
@@ -1061,7 +1061,7 @@ extension String {
     ///     - size: of the image to return.
     /// - Returns: a `UIImage` instance from this string using a specified
     /// attributes and size, or `nil` if the operation fails.
-    func image(withAttributes attributes: [NSAttributedStringKey: Any]? = nil, size: CGSize) -> UIImage? {
+    func image(withAttributes attributes: [NSAttributedString.Key: Any]? = nil, size: CGSize) -> UIImage? {
         UIGraphicsBeginImageContext(size)
         let rect = CGRect(origin: .zero, size: size)
         (self as NSString).draw(in: rect, withAttributes: attributes)
@@ -1148,11 +1148,11 @@ extension UIColor {
     }
     
     /// Creates a new `UIColor` instance from a specified dictionary
-    /// with `NSAttributedStringKey` keys.
+    /// with `NSAttributedString.Key` keys.
     ///
     /// - Parameters:
     ///     - dict: to initialize this color from.
-    convenience init?(dict: [NSAttributedStringKey: Any]?) {
+    convenience init?(dict: [NSAttributedString.Key: Any]?) {
         guard let dict = dict else { return nil }
         guard let hex = dict[.foregroundColor] as? UInt else { return nil }
         self.init(hex, alpha: dict[.alpha] as? CGFloat)
@@ -1341,7 +1341,7 @@ extension UIDevice {
 // MARK: - UIFont Constructor Extensions
 extension UIFont {
     
-    convenience init?(dict: [NSAttributedStringKey: Any]?) {
+    convenience init?(dict: [NSAttributedString.Key: Any]?) {
         guard let dict = dict else { return nil }
         guard let font = dict[.font] as? String else { return nil }
         let pointSize = dict[.pointSize] as? CGFloat ?? UIFont.systemFontSize

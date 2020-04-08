@@ -1,7 +1,7 @@
 //
 // The MIT License (MIT)
 //
-// Copyright © 2019 NoodleOfDeath. All rights reserved.
+// Copyright © 2020 NoodleOfDeath. All rights reserved.
 // NoodleOfDeath
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,33 +24,6 @@
 
 import MobileCoreServices
 
-// MARK: - Additional Global `CFString` kUTType Constants
-
-public let kUTTypeActionScript: CFString 
-    = "com.adobe.actionscript.script" as CFString
-public let kUTTypeCSS: CFString = "public.css" as CFString
-public let kUTTypeHTACCESS: CFString = "public.htaccess" as CFString
-public let kUTTypeMarkdown: CFString = "net.daringfireball.markdown" as CFString
-
-public let kUTTypeSwiftSource: CFString = "public.swift-source" as CFString
-public let kUTTypeYAML: CFString = "public.yaml" as CFString
-
-public let kUTTypeUnknown: CFString = "public.unknown" as CFString
-
-// MARK: Additional Enumerated Static Values
-extension UTType {
-
-    public static let ActionScript = UTType(kUTTypeActionScript)
-    public static let CSS = UTType(kUTTypeCSS)
-    public static let HTACCESS = UTType(kUTTypeHTACCESS)
-    public static let Markdown = UTType(kUTTypeMarkdown)
-    public static let YAML = UTType(kUTTypeYAML)
-
-    /// Unknown uniform type identifier.
-    public static let Unknown = UTType(kUTTypeUnknown)
-
-}
-
 /// Specifications for an object with a uniform type identifier.
 public protocol UTTypeProtocol {
 
@@ -61,49 +34,46 @@ public protocol UTTypeProtocol {
 
 /// Specifications for a object from which a uttype can be derived.
 public protocol UTTypePathExtensionProtocol {
-    
+
     /// Path extension of this object.
     var pathExtension: String { get }
-    
+
 }
 
 extension NSString: UTTypePathExtensionProtocol {}
 extension URL: UTTypePathExtensionProtocol {}
 
 extension String: UTTypeProtocol {
-    
+
     public var uttype: UTType {
         return (self as NSString).uttypeFromPathExtension
     }
-    
+
 }
 
 extension URL: UTTypeProtocol {
-    
+
     public var uttype: UTType {
         return uttypeFromPathExtension
     }
-    
+
 }
 
 extension UTTypePathExtensionProtocol {
-    
+
     /// Uniform type identifier of this object.
     public var uttypeFromPathExtension: UTType {
-        let ext =
-            pathExtension.replacingOccurrences(of: "^\\.*", with: "",
-                                               options: .regularExpression)
         guard let fileType =
             UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension,
-                                                  ext as CFString, nil)
+                                                  pathExtension as CFString, nil)
             else { return .Unknown }
         return UTType(fileType.takeRetainedValue())
     }
-    
+
 }
 
 extension UTTypeProtocol {
-    
+
     /// Returns whether or not the uniform type identifier of this object
     /// conforms to a set of other uniform type identifiers.
     ///
@@ -112,25 +82,25 @@ extension UTTypeProtocol {
     /// - Parameters:
     ///     - uttypes: to compare for conformance.
     ///     - mustConformToAll: specify `false` if this method should return
-    /// `true` when the uniform type identifier of this object conforms to any  
+    /// `true` when the uniform type identifier of this object conforms to any
     /// uniform type identifier specified in `uttypes`; specify `true`, if this
     /// method should return `true` only when the uniform type identifier
     /// of this object conforms to _all_ uniform type identifiers specified in
     /// `uttypes`. Default value is `false`.
     /// - Returns: `true` when the uniform type identifier of this object
-    /// conforms to any uniform type identifier specified in `uttypes` and 
-    /// `mustConformToAll` is `false`, or when the uniform type 
-    /// identifer of this object conforms to _all_ uniform type identifiers 
-    /// specified in `uttypes` and `mustConformToAll` is `true`; returns 
+    /// conforms to any uniform type identifier specified in `uttypes` and
+    /// `mustConformToAll` is `false`, or when the uniform type
+    /// identifer of this object conforms to _all_ uniform type identifiers
+    /// specified in `uttypes` and `mustConformToAll` is `true`; returns
     /// `false`, otherwise.
-    public func conforms(to uttypes: UTType..., 
+    public func conforms(to uttypes: UTType...,
         mustConformToAll: Bool = false) -> Bool {
         return conforms(to: uttypes, mustConformToAll: mustConformToAll)
     }
-    
-    /// Returns the first uniform type identifier from a set of uniform type 
-    /// identifers that the uniform type identifier of this object conforms to, 
-    /// or `nil` if the uniform type identifier of this object conforms to none  
+
+    /// Returns the first uniform type identifier from a set of uniform type
+    /// identifers that the uniform type identifier of this object conforms to,
+    /// or `nil` if the uniform type identifier of this object conforms to none
     /// of the uniform type identifiers specified.
     ///
     /// Overload for `conforms(toFirst: [UTType]) -> UTType?`.
@@ -139,113 +109,109 @@ extension UTTypeProtocol {
     ///     - uttypes: to compare for conformance.
     /// - Returns: the first uniform type identifier from `uttypes` that the
     /// uniform type identifer of this object conforms to, or `nil` if the
-    /// uniform type identifier of this object conforms to none of the uniform 
+    /// uniform type identifier of this object conforms to none of the uniform
     /// type identifiers specified in `uttypes`.
     public func conforms(toFirst uttypes: UTType...) -> UTType? {
         return uttype.conforms(toFirst: uttypes)
     }
-    
+
     /// Returns whether or not the uniform type identifier of this object
     /// conforms to a set of other uniform type identifiers.
     ///
     /// - Parameters:
     ///     - uttypes: to compare for conformance.
     ///     - mustConformToAll: specify `false` if this method should return
-    /// `true` when the uniform type identifier of this object conforms to any  
+    /// `true` when the uniform type identifier of this object conforms to any
     /// uniform type identifier specified in `uttypes`; specify `true`, if this
     /// method should return `true` only when the uniform type identifier
     /// of this object conforms to _all_ uniform type identifiers specified in
     /// `uttypes`. Default value is `false`.
     /// - Returns: `true` when the uniform type identifier of this object
-    /// conforms to any uniform type identifier specified in `uttypes` and 
-    /// `mustConformToAll` is `false`, or when the uniform type 
-    /// identifer of this object conforms to _all_ uniform type identifiers 
-    /// specified in `uttypes` and `mustConformToAll` is `true`; returns 
+    /// conforms to any uniform type identifier specified in `uttypes` and
+    /// `mustConformToAll` is `false`, or when the uniform type
+    /// identifer of this object conforms to _all_ uniform type identifiers
+    /// specified in `uttypes` and `mustConformToAll` is `true`; returns
     /// `false`, otherwise.
     public func conforms(to uttypes: [UTType],
                          mustConformToAll: Bool = false) -> Bool {
         return uttype.conforms(to: uttypes, mustConformToAll: mustConformToAll)
     }
-    
-    /// Returns the first uniform type identifier from a set of uniform type 
-    /// identifers that the uniform type identifier of this object conforms to, 
-    /// or `nil` if the uniform type identifier of this object conforms to none  
+
+    /// Returns the first uniform type identifier from a set of uniform type
+    /// identifers that the uniform type identifier of this object conforms to,
+    /// or `nil` if the uniform type identifier of this object conforms to none
     /// of the uniform type identifiers specified.
     ///
     /// - Parameters:
     ///     - uttypes: to compare for conformance.
     /// - Returns: the first uniform type identifier from `uttypes` that the
     /// uniform type identifer of this object conforms to, or `nil` if the
-    /// uniform type identifier of this object conforms to none of the uniform 
+    /// uniform type identifier of this object conforms to none of the uniform
     /// type identifiers specified in `uttypes`.
     public func conforms(toFirst uttypes: [UTType]) -> UTType? {
         return uttype.conforms(toFirst: uttypes)
     }
-    
+
 }
 
 /// A bridging data structure that converts all `CFString` constants that match
-/// the regular expression `"kUTType\w+"` and modularizes them into a `UTType`
+/// the regular expression "`kUTType\w+`" and modularizes them into a `UTType`
 /// class constant.
 ///
 /// **Example:** `kUTTypeBMP` is modularized to `UTType.BMP`.
-public struct UTType: Hashable, Equatable, RawRepresentable {
-    
+public struct UTType: RawRepresentable {
+
     // MARK: - Typealiases
-    
+
     public typealias RawValue = String
     public typealias CoreValue = CFString
-    
+
     // MARK: - Static Properties
-    
+
     /// Default raw value for new uniform type identifier instances.
     public static let DefaultRawValue = kUTTypeUnknown as RawValue
-    
+
     /// Default core value for new uniform type identifier instances.
     public static let DefaultCoreValue: CoreValue = kUTTypeUnknown
-    
+
     // MARK: - RawRepresentable Properties
-    
+
     public let rawValue: RawValue
-    
-    // MARK - Hashable Properties
-    
-    public var hashValue: Int { return rawValue.hashValue }
-    
+
     // MARK: - Instance Properties
-    
+
     /// `CFString` representation of this uniform type idenitifer.
     public var coreValue: CoreValue { return rawValue as CoreValue }
-    
+
     /// `true` if `coreValue == kUTTypeUnknown`; `false` otherwise.
     public var isUnknown: Bool { return coreValue == kUTTypeUnknown }
-    
+
     /// `true` if `coreValue != kUTTypeUnknown`; `false` otherwise.
     public var isNotUnknown: Bool { return coreValue != kUTTypeUnknown }
-    
+
     // MARK: - Constructor Methods
-    
-    /// Constructs a new uniform type identifier instance with an initial 
+
+    /// Constructs a new uniform type identifier instance with an initial
     /// raw value.
     ///
     /// - Parameters:
     ///     - rawValue: to initialize this uniform type identifier with.
     public init(rawValue: RawValue) {
-        self.rawValue = rawValue.starts(with: "dyn.") ? 
+        self.rawValue = rawValue.starts(with: "dyn.") ?
             kUTTypeItem as RawValue : rawValue
     }
-    
-    /// Constructs a new uniform type identifier instance with an initial 
+
+    /// Constructs a new uniform type identifier instance with an initial
     /// raw value.
     ///
     /// - Parameters:
     ///     - rawValue: to initialize this uniform type identifier with.
     public init(_ rawValue: RawValue) {
-        self.rawValue = rawValue.starts(with: "dyn.") ? 
+        self.rawValue = rawValue.starts(with: "dyn.") ?
             kUTTypeItem as RawValue : rawValue
     }
-    
-    /// Constructs a new uniform type identifier instance with an initial core 
+
+    /// Constructs a new uniform type identifier instance with an initial core
     /// value.
     ///
     /// - Parameters:
@@ -253,8 +219,8 @@ public struct UTType: Hashable, Equatable, RawRepresentable {
     public init(coreValue: CoreValue) {
         rawValue = coreValue as RawValue
     }
-    
-    /// Constructs a new uniform type identifier instance with an initial core 
+
+    /// Constructs a new uniform type identifier instance with an initial core
     /// value.
     ///
     /// - Parameters:
@@ -262,39 +228,13 @@ public struct UTType: Hashable, Equatable, RawRepresentable {
     public init(_ coreValue: CoreValue) {
         rawValue = coreValue as RawValue
     }
-    
-    // MARK: - Equatable Methods
-    
-    public static func == (lhs: UTType, rhs: UTType) -> Bool {
-        return lhs.rawValue == rhs.rawValue
-    }
-    
-    public static func == (lhs: UTType?, rhs: UTType) -> Bool {
-        return lhs?.rawValue == rhs.rawValue
-    }
-    
-    public static func == (lhs: UTType, rhs: UTType?) -> Bool {
-        return lhs.rawValue == rhs?.rawValue
-    }
-    
-    public static func != (lhs: UTType, rhs: UTType) -> Bool {
-        return lhs.rawValue != rhs.rawValue
-    }
-    
-    public static func != (lhs: UTType?, rhs: UTType) -> Bool {
-        return lhs?.rawValue != rhs.rawValue
-    }
-    
-    public static func != (lhs: UTType, rhs: UTType?) -> Bool {
-        return lhs.rawValue != rhs?.rawValue
-    }
-    
+
     // MARK: - Instance Methods
-    
+
     /// Returns whether or not this uniform type identifier conforms to a set of
     /// other uniform type identifiers.
     ///
-    /// Overload for 
+    /// Overload for
     /// `conforms(to: [UTType], mustConformToAll: Bool)`.
     ///
     /// - Parameters:
@@ -302,23 +242,23 @@ public struct UTType: Hashable, Equatable, RawRepresentable {
     ///     - mustConformToAll: specify `false` if this method should return
     /// `true` when this uniform type identifier conforms to any uniform type
     /// identifier specified in `uttypes`; specify `true`, if this method
-    /// should only return `true` when this uniform type identifier conforms 
-    /// to _all_ uniform type identifiers specified in `uttypes`. Default value 
+    /// should only return `true` when this uniform type identifier conforms
+    /// to _all_ uniform type identifiers specified in `uttypes`. Default value
     /// is `false`.
     /// - Returns: `true` when this uniform type identifier conforms to any
     /// uniform type identifier specified in `uttypes` and `mustConformToAll` is
     /// `false`, or when this uniform type identifier conforms to _all_
-    /// uniform type identifiers specified in `uttypes` and `mustConformToAll` 
+    /// uniform type identifiers specified in `uttypes` and `mustConformToAll`
     /// is `true`; returns `false`, otherwise.
-    public func conforms(to uttypes: UTType..., 
+    public func conforms(to uttypes: UTType...,
         mustConformToAll: Bool = false) -> Bool {
-        return conforms(to: uttypes, 
+        return conforms(to: uttypes,
                         mustConformToAll: mustConformToAll)
     }
-    
-    /// Returns the first uniform type identifier from a set of uniform type 
-    /// identifers that this uniform type identifier conforms to, or `nil` if 
-    /// this uniform type identifier conforms to none of the uniform type 
+
+    /// Returns the first uniform type identifier from a set of uniform type
+    /// identifers that this uniform type identifier conforms to, or `nil` if
+    /// this uniform type identifier conforms to none of the uniform type
     /// identifiers specified.
     ///
     /// Overload for `conforms(toFirst: [UTType]) -> UTType?`.
@@ -332,7 +272,7 @@ public struct UTType: Hashable, Equatable, RawRepresentable {
     public func conforms(toFirst uttypes: UTType...) -> UTType? {
         return conforms(toFirst: uttypes)
     }
-    
+
     /// Returns whether or not this uniform type identifier conforms to a set of
     /// other uniform type identifiers.
     ///
@@ -341,32 +281,32 @@ public struct UTType: Hashable, Equatable, RawRepresentable {
     ///     - mustConformToAll: specify `false` if this method should return
     /// `true` when this uniform type identifier conforms to any uniform type
     /// identifier specified in `uttypes`; specify `true`, if this method
-    /// should only return `true` when this uniform type identifier conforms 
-    /// to _all_ uniform type identifiers specified in `uttypes`. Default value 
+    /// should only return `true` when this uniform type identifier conforms
+    /// to _all_ uniform type identifiers specified in `uttypes`. Default value
     /// is `true`.
     /// - Returns: `true` when this uniform type identifier conforms to any
     /// uniform type identifier specified in `uttypes` and `mustConformToAll` is
     /// `false`, or when this uniform type identifier conforms to _all_
-    /// uniform type identifiers specified in `uttypes` and `mustConformToAll` 
+    /// uniform type identifiers specified in `uttypes` and `mustConformToAll`
     /// is `true`; returns `false`, otherwise.
-    public func conforms(to uttypes: [UTType], 
+    public func conforms(to uttypes: [UTType],
                          mustConformToAll: Bool = false) -> Bool {
         if uttypes.count < 1 { return false }
         if uttypes.count == 1 {
             return UTTypeConformsTo(coreValue, uttypes[0].coreValue)
         }
         for uttype in uttypes {
-            if !mustConformToAll && 
+            if !mustConformToAll &&
                 UTTypeConformsTo(coreValue, uttype.coreValue) { return true }
-            if mustConformToAll && 
+            if mustConformToAll &&
                 !UTTypeConformsTo(coreValue, uttype.coreValue) { return false }
         }
         return true
     }
-    
-    /// Returns the first uniform type identifier from a set of uniform type 
-    /// identifers that this uniform type identifier conforms to, or `nil` if 
-    /// this uniform type identifier conforms to none of the uniform type 
+
+    /// Returns the first uniform type identifier from a set of uniform type
+    /// identifers that this uniform type identifier conforms to, or `nil` if
+    /// this uniform type identifier conforms to none of the uniform type
     /// identifiers specified.
     ///
     /// - Parameters:
@@ -385,30 +325,70 @@ public struct UTType: Hashable, Equatable, RawRepresentable {
         }
         return nil
     }
-    
+
 }
 
-// MARK: - CustomStringConvertible Properties
+// MARK: - Hashable Extension
+extension UTType: Hashable {
+
+    public var hashValue: Int { return rawValue.hashValue }
+
+}
+
+// MARK: - Equatable Extension
+extension UTType: Equatable {
+
+    public static func == (lhs: UTType, rhs: UTType) -> Bool {
+        return lhs.rawValue == rhs.rawValue
+    }
+
+    public static func == (lhs: UTType?, rhs: UTType) -> Bool {
+        return lhs?.rawValue == rhs.rawValue
+    }
+
+    public static func == (lhs: UTType, rhs: UTType?) -> Bool {
+        return lhs.rawValue == rhs?.rawValue
+    }
+
+    public static func != (lhs: UTType, rhs: UTType) -> Bool {
+        return lhs.rawValue != rhs.rawValue
+    }
+
+    public static func != (lhs: UTType?, rhs: UTType) -> Bool {
+        return lhs?.rawValue != rhs.rawValue
+    }
+
+    public static func != (lhs: UTType, rhs: UTType?) -> Bool {
+        return lhs.rawValue != rhs?.rawValue
+    }
+
+}
+
+// MARK: - Codable Extension
+extension UTType: Codable {}
+
+
+// MARK: - CustomStringConvertible Extension
 extension UTType: CustomStringConvertible {
-    
+
     public var description: String {
         return rawValue
     }
-    
+
 }
 
-// MARK: - CVarArg Properties
+// MARK: - CVarArg Extension
 extension UTType: CVarArg {
-    
+
     public var _cVarArgEncoding: [Int] {
         return description._cVarArgEncoding
     }
-    
+
 }
 
 // MARK: - Enumerated Static Values
 extension UTType {
-    
+
     /*
      *  kUTTypeItem
      *
@@ -477,7 +457,7 @@ extension UTType {
     public static let Archive = UTType(kUTTypeArchive)
     @available(iOS 3.0, *)
     public static let DiskImage = UTType(kUTTypeDiskImage)
-    
+
     /*
      *  kUTTypeData
      *
@@ -490,7 +470,7 @@ extension UTType {
      *
      *  kUTTypeDirectory
      *
-     *    file system directory 
+     *    file system directory
      *    (includes packages AND folders)
      *
      *    UTI: public.directory
@@ -569,7 +549,7 @@ extension UTType {
     public static let AliasRecord = UTType(kUTTypeAliasRecord)
     @available(iOS 8.0, *)
     public static let URLBookmarkData = UTType(kUTTypeURLBookmarkData)
-    
+
     /*
      *  kUTTypeURL
      *
@@ -582,7 +562,7 @@ extension UTType {
      *
      *  kUTTypeFileURL
      *
-     *    The text of a "file:" URL 
+     *    The text of a "file:" URL
      *    (OSType 'furl')
      *
      *    UTI: public.file-url
@@ -593,11 +573,11 @@ extension UTType {
     public static let URL = UTType(kUTTypeURL)
     @available(iOS 3.0, *)
     public static let FileURL = UTType(kUTTypeFileURL)
-    
+
     /*
      *  kUTTypeText
      *
-     *    base type for all text-encoded data, 
+     *    base type for all text-encoded data,
      *    including text with markup (HTML, RTF, etc.)
      *
      *    UTI: public.text
@@ -623,8 +603,8 @@ extension UTType {
      *
      *  kUTTypeUTF16ExternalPlainText
      *
-     *    plain text, UTF-16 encoding, with BOM, or if BOM 
-     *    is not present, has "external representation" 
+     *    plain text, UTF-16 encoding, with BOM, or if BOM
+     *    is not present, has "external representation"
      *    byte order (big-endian).
      *    (OSType 'ut16')
      *
@@ -688,7 +668,7 @@ extension UTType {
     @available(iOS 3.0, *)
     public static let UTF8PlainText = UTType(kUTTypeUTF8PlainText)
     @available(iOS 3.0, *)
-    public static let UTF16ExternalPlainText 
+    public static let UTF16ExternalPlainText
         = UTType(kUTTypeUTF16ExternalPlainText)
     @available(iOS 3.0, *)
     public static let UTF16PlainText = UTType(kUTTypeUTF16PlainText)
@@ -699,11 +679,11 @@ extension UTType {
     @available(iOS 8.0, *)
     public static let TabSeparatedText = UTType(kUTTypeTabSeparatedText)
     @available(iOS 8.0, *)
-    public static let UTF8TabSeparatedText 
+    public static let UTF8TabSeparatedText
         = UTType(kUTTypeUTF8TabSeparatedText)
     @available(iOS 3.0, *)
     public static let RTF = UTType(kUTTypeRTF)
-    
+
     /*
      *  kUTTypeHTML
      *
@@ -725,7 +705,7 @@ extension UTType {
     public static let HTML = UTType(kUTTypeHTML)
     @available(iOS 3.0, *)
     public static let XML = UTType(kUTTypeXML)
-    
+
     /*
      *  kUTTypeSourceCode
      *
@@ -810,7 +790,7 @@ extension UTType {
     @available(iOS 3.0, *)
     public static let SourceCode = UTType(kUTTypeSourceCode)
     @available(iOS 8.0, *)
-    public static let AssemblyLanguageSource 
+    public static let AssemblyLanguageSource
         = UTType(kUTTypeAssemblyLanguageSource)
     @available(iOS 3.0, *)
     public static let CSource = UTType(kUTTypeCSource)
@@ -821,7 +801,7 @@ extension UTType {
     @available(iOS 3.0, *)
     public static let CPlusPlusSource = UTType(kUTTypeCPlusPlusSource)
     @available(iOS 3.0, *)
-    public static let ObjectiveCPlusPlusSource 
+    public static let ObjectiveCPlusPlusSource
         = UTType(kUTTypeObjectiveCPlusPlusSource)
     @available(iOS 3.0, *)
     public static let CHeader = UTType(kUTTypeCHeader)
@@ -829,7 +809,7 @@ extension UTType {
     public static let CPlusPlusHeader = UTType(kUTTypeCPlusPlusHeader)
     @available(iOS 3.0, *)
     public static let JavaSource = UTType(kUTTypeJavaSource)
-    
+
     /*
      *  kUTTypeScript
      *
@@ -931,7 +911,7 @@ extension UTType {
     public static let RubyScript = UTType(kUTTypeRubyScript)
     @available(iOS 8.0, *)
     public static let PHPScript = UTType(kUTTypePHPScript)
-    
+
     /*
      *  kUTTypeJSON
      *
@@ -975,7 +955,7 @@ extension UTType {
     public static let XMLPropertyList = UTType(kUTTypeXMLPropertyList)
     @available(iOS 8.0, *)
     public static let BinaryPropertyList = UTType(kUTTypeBinaryPropertyList)
-    
+
     /*
      *  kUTTypePDF
      *
@@ -987,7 +967,7 @@ extension UTType {
      *
      *  kUTTypeRTFD
      *
-     *    Rich text EFat Directory 
+     *    Rich text EFat Directory
      *    (RTF with content embedding, on-disk format)
      *
      *    UTI: com.apple.rtfd
@@ -1025,11 +1005,11 @@ extension UTType {
     @available(iOS 3.0, *)
     public static let FlatRTFD = UTType(kUTTypeFlatRTFD)
     @available(iOS 3.0, *)
-    public static let TXNTextAndMultimediaData 
+    public static let TXNTextAndMultimediaData
         = UTType(kUTTypeTXNTextAndMultimediaData)
     @available(iOS 3.0, *)
     public static let WebArchive = UTType(kUTTypeWebArchive)
-    
+
     /*
      *  kUTTypeImage
      *
@@ -1167,11 +1147,11 @@ extension UTType {
     @available(iOS 8.0, *)
     public static let RawImage = UTType(kUTTypeRawImage)
     @available(iOS 8.0, *)
-    public static let ScalableVectorGraphics 
+    public static let ScalableVectorGraphics
         = UTType(kUTTypeScalableVectorGraphics)
     @available(iOS 9.1, *)
     public static let LivePhoto = UTType(kUTTypeLivePhoto)
-    
+
     /*
      *  kUTTypeAudiovisualContent
      *
@@ -1327,7 +1307,7 @@ extension UTType {
     @available(iOS 8.0, *)
     public static let MPEG2Video = UTType(kUTTypeMPEG2Video)
     @available(iOS 8.0, *)
-    public static let MPEG2TransportStream 
+    public static let MPEG2TransportStream
         = UTType(kUTTypeMPEG2TransportStream)
     @available(iOS 3.0, *)
     public static let MP3 = UTType(kUTTypeMP3)
@@ -1336,21 +1316,21 @@ extension UTType {
     @available(iOS 3.0, *)
     public static let MPEG4Audio = UTType(kUTTypeMPEG4Audio)
     @available(iOS 3.0, *)
-    public static let AppleProtectedMPEG4Audio 
+    public static let AppleProtectedMPEG4Audio
         = UTType(kUTTypeAppleProtectedMPEG4Audio)
     @available(iOS 8.0, *)
-    public static let AppleProtectedMPEG4Video 
+    public static let AppleProtectedMPEG4Video
         = UTType(kUTTypeAppleProtectedMPEG4Video)
     @available(iOS 8.0, *)
     public static let AVIMovie = UTType(kUTTypeAVIMovie)
     @available(iOS 8.0, *)
-    public static let AudioInterchangeFileFormat 
+    public static let AudioInterchangeFileFormat
         = UTType(kUTTypeAudioInterchangeFileFormat)
     @available(iOS 8.0, *)
     public static let WaveformAudio = UTType(kUTTypeWaveformAudio)
     @available(iOS 8.0, *)
     public static let MIDIAudio = UTType(kUTTypeMIDIAudio)
-    
+
     /*
      *  kUTTypePlaylist
      *
@@ -1371,7 +1351,7 @@ extension UTType {
     public static let Playlist = UTType(kUTTypePlaylist)
     @available(iOS 8.0, *)
     public static let M3UPlaylist = UTType(kUTTypeM3UPlaylist)
-    
+
     /*
      *  kUTTypeFolder
      *
@@ -1463,7 +1443,7 @@ extension UTType {
     public static let XPCService = UTType(kUTTypeXPCService)
     @available(iOS 3.0, *)
     public static let Framework = UTType(kUTTypeFramework)
-    
+
     /*
      *  kUTTypeApplication
      *
@@ -1484,7 +1464,7 @@ extension UTType {
      *
      *  kUTTypeApplicationFile
      *
-     *    a single-file Carbon/Classic application 
+     *    a single-file Carbon/Classic application
      *
      *    UTI: com.apple.application-file
      *    conform/// to: com.apple.application, public.data
@@ -1539,7 +1519,7 @@ extension UTType {
     public static let ApplicationFile = UTType(kUTTypeApplicationFile)
     @available(iOS 8.0, *)
     public static let UnixExecutable = UTType(kUTTypeUnixExecutable)
-    
+
     // Other platform binaries
     @available(iOS 8.0, *)
     public static let WindowsExecutable = UTType(kUTTypeWindowsExecutable)
@@ -1547,12 +1527,12 @@ extension UTType {
     public static let JavaClass = UTType(kUTTypeJavaClass)
     @available(iOS 8.0, *)
     public static let JavaArchive = UTType(kUTTypeJavaArchive)
-    
+
     // Misc. binaries
     @available(iOS 8.0, *)
-    public static let SystemPreferencesPane 
+    public static let SystemPreferencesPane
         = UTType(kUTTypeSystemPreferencesPane)
-    
+
     /*
      *  kUTTypeGNUZipArchive
      *
@@ -1584,7 +1564,7 @@ extension UTType {
     public static let Bzip2Archive = UTType(kUTTypeBzip2Archive)
     @available(iOS 8.0, *)
     public static let ZipArchive = UTType(kUTTypeZipArchive)
-    
+
     /*
      *  kUTTypeSpreadsheet
      *
@@ -1615,7 +1595,7 @@ extension UTType {
     public static let Presentation = UTType(kUTTypePresentation)
     @available(iOS 8.0, *)
     public static let Database = UTType(kUTTypeDatabase)
-    
+
     /*
      *  kUTTypeVCard
      *
@@ -1655,7 +1635,7 @@ extension UTType {
     public static let CalendarEvent = UTType(kUTTypeCalendarEvent)
     @available(iOS 8.0, *)
     public static let EmailMessage = UTType(kUTTypeEmailMessage)
-    
+
     /*
      *  kUTTypeInternetLocation
      *
@@ -1667,7 +1647,7 @@ extension UTType {
      */
     @available(iOS 8.0, *)
     public static let InternetLocation = UTType(kUTTypeInternetLocation)
-    
+
     /*
      *  kUTTypeInkText
      *
@@ -1743,9 +1723,36 @@ extension UTType {
     @available(iOS 8.0, *)
     public static let X509Certificate = UTType(kUTTypeX509Certificate)
     @available(iOS 8.0, *)
-    public static let ElectronicPublication 
+    public static let ElectronicPublication
         = UTType(kUTTypeElectronicPublication)
     @available(iOS 8.0, *)
     public static let Log = UTType(kUTTypeLog)
-    
+
+}
+
+// MARK: - Additional Global `CFString` kUTType Constants
+
+public let kUTTypeActionScript: CFString
+    = "com.adobe.actionscript.script" as CFString
+public let kUTTypeCSS: CFString = "public.css" as CFString
+public let kUTTypeHTACCESS: CFString = "public.htaccess" as CFString
+public let kUTTypeMarkdown: CFString = "net.daringfireball.markdown" as CFString
+
+public let kUTTypeSwiftSource: CFString = "public.swift-source" as CFString
+public let kUTTypeYAML: CFString = "public.yaml" as CFString
+
+public let kUTTypeUnknown: CFString = "public.unknown" as CFString
+
+// MARK: - Additional Enumerated Static Values
+extension UTType {
+
+    public static let ActionScript = UTType(kUTTypeActionScript)
+    public static let CSS = UTType(kUTTypeCSS)
+    public static let HTACCESS = UTType(kUTTypeHTACCESS)
+    public static let Markdown = UTType(kUTTypeMarkdown)
+    public static let YAML = UTType(kUTTypeYAML)
+
+    /// Unknown uniform type identifier.
+    public static let Unknown = UTType(kUTTypeUnknown)
+
 }

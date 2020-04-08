@@ -22,10 +22,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#if os(iOS)
-import MobileCoreServices
-#else
+#if os(OSX)
 import CoreServices
+#else
+import MobileCoreServices
 #endif
 
 // MARK: - Additional Global `CFString` kUTType Constants

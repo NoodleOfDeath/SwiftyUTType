@@ -1,5 +1,5 @@
 PODS:
-  - SwiftyUTType (1.0.0)
+  - SwiftyUTType (1.0.3)
 
 DEPENDENCIES:
   - SwiftyUTType (from `../`)
@@ -9,8 +9,8 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  SwiftyUTType: 5a86d679dd380f7f0d0b603411b38630d0bd5d91
+  SwiftyUTType: a7443de29d00648f22d7b3d772b962e30f1ee1ee
 
 PODFILE CHECKSUM: 866934217e9f439752ba43f2925460c0338505b3
 
-COCOAPODS: 1.5.2
+COCOAPODS: 1.9.1

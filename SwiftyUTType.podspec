@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'SwiftyUTType'
-  s.version          = '1.0.2'
+  s.version          = '1.0.3'
   s.summary          = 'Lightweight framework for working with uniform type identifiers.'
 
 # This description is used to generate tags and improve search results.
@@ -28,6 +28,7 @@ Lightweight framework for working with uniform type identifiers as a structured 
   s.source           = { :git => 'https://github.com/NoodleOfDeath/SwiftyUTType.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
+  s.osx.deployment_target = '10.15'
   s.ios.deployment_target = '9.0'
   s.swift_version = '5.0'
   s.pod_target_xcconfig = { 'SWIFT_VERSION' => '5.0' }

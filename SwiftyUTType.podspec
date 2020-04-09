@@ -28,8 +28,8 @@ Lightweight framework for working with uniform type identifiers as a structured 
   s.source           = { :git => 'https://github.com/NoodleOfDeath/SwiftyUTType.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
-  s.osx.deployment_target = '10.15'
-  s.ios.deployment_target = '9.0'
+  s.ios.deployment_target = "9.0"
+  s.osx.deployment_target = "10.10"
   s.swift_version = '5.0'
   s.pod_target_xcconfig = { 'SWIFT_VERSION' => '5.0' }
 
@@ -41,4 +41,5 @@ Lightweight framework for working with uniform type identifiers as a structured 
 
   # s.public_header_files = 'SwiftyUTType/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'Foundation'
+  s.frameworks = 'CoreServices'
 end

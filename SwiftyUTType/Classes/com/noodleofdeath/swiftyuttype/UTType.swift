@@ -22,11 +22,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#if os(OSX)
 import CoreServices
-#else
-import MobileCoreServices
-#endif
 
 // MARK: - Additional Global `CFString` kUTType Constants
 
@@ -1173,7 +1169,7 @@ extension UTType {
     @available(iOS 8.0, *)
     public static let ScalableVectorGraphics 
         = UTType(kUTTypeScalableVectorGraphics)
-    @available(iOS 9.1, *)
+    @available(iOS 9.1, OSX 10.12, *)
     public static let LivePhoto = UTType(kUTTypeLivePhoto)
     
     /*
